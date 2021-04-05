@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Search{% endblock %}
+{% block blank %}
+<!--=============================================
+	=            breadcrumb area         =
+	=============================================-->
+	
+	
+	
+    <!--=====  End of breadcrumb area  ======-->
+
+    <!--=============================================
+    =            added to cart message         =
+    =============================================-->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                {% if messages %}
+				{% for message in messages %}
+				<div class="alert alert-{{message.tags}}" role="alert">
+					{{message}}
+				</div>
+				{% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!--=====  End of message  ======-->
+    
+    <!--=============================================
+    =            shop page content         =
+    =============================================-->
+    
+    <div class="shop-page-content my-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 order-1 order-lg-2">
+                    {% if query %}
+                        <!-- <h1>Products containing "{{ query }}"</h1> -->
+                        <h3>
+                        {% with results.count as total_results %}
+                            Found {{ total_results }} result{{ total_results|pluralize }} for "{{ query }}"
+                        {% endwith %}
+                        </h3>
+                        
+                        <!--=======  Shop header  =======-->
+					
+                        <div class="shop-header mb-30">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
+                                    <!--=======  view mode  =======-->
+                                    <div class="view-mode-icons mb-xs-10">
+                                        <a class="active" href="#" data-target="grid"><i class="icon ion-md-apps"></i></a>
+                                        <!-- <a  href="#" data-target="list"><i class="icon ion-ios-list"></i></a> -->
+                                    </div>
+                                    
+                                    <!--=======  End of view mode  =======-->
+                                </div>
+                                
+                                    
+                                    <div class="col-lg-8 col-md-8 col-sm-12 d-flex flex-column flex-sm-row justify-content-between align-items-left align-items-sm-center">
+                                        
+                                        {% if user.is_superuser is True %}   
+                                        <div class="sort-by-dropdown d-flex align-items-center mb-xs-10">
+                                                
+                                                <!-- <a href="#"> <i class="icon ion-md-heart-empty"></i> Browse Wishlist</a> -->
+                                            
+                                            </p> 
+                                        </div> 
+                                        {% endif %}
+                                        <!--=======  Sort by dropdown  =======-->
+                                        
+                                        <!-- <div class="sort-by-dropdown d-flex align-items-center mb-xs-10">
+                                            <p class="mr-10 mb-0">Sort By: </p>
+                                            <select name="sort-by" id="sort-by" class="nice-select">
+                                                <option value="0">Sort By Newness</option>
+                                                <option value="0">Sort By Price: Low to High</option>
+                                                <option value="0">Sort By Price: High to Low</option>
+                                            </select>
+                                        </div> -->
+                                        
+                                        <!--=======  End of Sort by dropdown  =======-->
+        
+                                        <!-- <p class="result-show-message">
+                                            {% include "pagination.html" with page=products %}
+                                                {% for c in categories %}
+                                                    {% if not category.slug == c.slug %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                        </p> -->
+                                    </div>
+                                    
+                            </div>
+                            
+                        </div>
+                        <!--=======  End of Shop header  =======-->
+
+                        <!--=======  shop product display area  =======-->
+                        <div class="shop-product-wrap grid row mb-30 no-gutters">
+                            
+                            {% for product in results %}   
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                                <!--=======  grid view product  =======-->
+                                
+                                <!--=======  single product  =======-->
+                                <!-- {% for product in results %}
+                                            <h4><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h4>
+                                            {% empty %}
+                                            <p>There are no results for your query.</p>
+                                            {% endfor %} -->
+                                <div class="fl-product shop-grid-view-product">
+                                    
+                                            <div style="width: 200px; 
+                                                    height: 200px;
+                                                    /*background-color: red;*/
+                                                    /*background-image: url('{{ MEDIA_URL }}{{ product.image.url }}') ;*/
+                                                    background-repeat: no-repeat;
+                                                    background-size: contain;
+                                                    background-position: center;
+                                                    margin: 0 auto;
+                                                    position:relative;
+                                                    display:inline-block;" > 
+                                                    <!-- istersen yukaridaki css'i silip class="image" yapabilirsin. yaparsan iki resimli halini kullanabilirsin ama resim boyutlari guzel olmayacak -->
+                                                    <a href="{{ product.get_absolute_url }}">
+                                                        
+                                                        <img style="height: 200px; width: auto;" src="{% if product.product.image %}{{ product.product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" class="img-fluid" alt="">
+                                                        
+                                                    </a>
+                                                    
+                                                    <!-- wishlist icon -->
+                                                    <!-- <span class="wishlist-icon">
+                                                            <a href="#" ><i class="icon ion-md-heart-empty"></i></a>
+                                                    </span> -->
+                                            </div>
+                                            
+                                            <div class="content">
+                                                <h2 class="product-title"> <a href="{{ product.get_absolute_url }}">{{ product.sku}}</a></h2>
+                                                <!-- <span>In Stock: {{ product.get_quantity_on_hand }}</span> -->
+                                                        
+                                                {% if request.user.is_authenticated %}
+                                                <p class="product-price">
+                                                    {% if product.sale_price %}
+                                                    <span class="main-price discounted">${{ product.price }}</span>
+                                                    <span class="discounted-price">${{ product.sale_price }}</span> 
+                                                    {% else %}
+                                                    <span class="discounted-price">${{ product.price }}</span> 
+                                                    {% endif %}
+                                                </p>
+                                                                          
+                                                <p>
+                                                    <div class="cart-buttons mb-20">
+                                                    
+                                                       
+                                                            <div>
+                                                                
+                                                                <a href="{% url "products:product_detail_view_by_variant" product.product.id product.product.slug product.id %}"><button type="submit" class="add-to-cart-butonu" >View</button></a>
+                                                            </div>
+                                                            
+                                                            
+                            
+                                                    </div>
+                                                
+                                                    {% else%}
+                                                    <div class="rating">
+                                                        <i class="fa fa-star active"></i>
+                                                        <i class="fa fa-star active"></i>
+                                                        <i class="fa fa-star active"></i>
+                                                        <i class="fa fa-star active"></i>
+                                                        <i class="fa fa-star active"></i>
+                                                    </div>
+                                                    <div class="product-feature-details">
+                                                        <div class="cart-buttons mb-20">
+                                                            <div class="add-to-cart-btn d-block">
+                                                                <a href="{% url 'account:registration_view' %}" class="fl-btn"><i class="fa fa-check-circle"> </i> Become A Dealer</a>
+                                                                
+                                                            </div>
+                                                        <small><p>Already Delaer? <a href="{% url 'login' %}">Login</a></p></small>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                {% endif %}
+            
+                                                
+            
+                                                <!-- <div class="hover-icons">
+                                                    
+                                                    <ul>
+                                                        <li><a href="#"  data-tooltip="Add to Cart"><i class="icon ion-md-cart"></i></a></li>
+                                                        <li><a href="#"  data-tooltip="Compare"><i class="icon ion-md-options"></i></a></li>
+                                                        <li><a href="#"  data-toggle = "modal" data-target="#quick-view-modal-container" data-tooltip="Quick View"><i class="icon ion-md-open"></i></a></li>
+                                                    </ul>
+                                                </div> -->
+                                            </div>
+
+
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!--=======  End of shop product display area  =======-->
+                
+                    <!--=======  pagination area  =======-->
+                    
+                    <div class="pagination-area  mb-md-50 mb-sm-50">
+                       
+                        {% if results.has_other_pages %} 
+                        <ul>
+                            {% if results.has_previous %}
+                            <li><a href="?page={{ results.previous_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">&laquo;</a></li>
+                            {% endif%}
+                            {% for i in results.paginator.page_range %}
+                            {% if results.number == i %}
+                                <li><a class="active">{{i}}</a></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">{{ i }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            
+                            {% if results.has_next %}
+                            <li><a href="?page={{ results.next_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">&raquo;</a></li>
+                            {% endif%}
+                        </ul>
+                        {% endif%}
+                    </div> 
+                    
+            
+                    <!--=======  End of pagination area  =======-->
+                        
+                        <!-- <button class='btn btn-info'><a href="{% url "products:post_search" %}">Search again</a></button> -->
+                        
+                    <!-- {% else %}
+                        <h3>Search for products</h3>
+                        <hr>
+                        <br>
+                        <form method="get">
+                        {{ form.as_p }}
+                        <input class="btn btn-info" type="submit" value="Search">
+                        </form> -->
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--=====  End of shop page content  ======-->
+{% endblock %}
+

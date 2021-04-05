@@ -1,0 +1,51 @@
+{% load static %}
+<style>
+	h3 {
+		color:white;
+}
+h4 {
+		color:white;
+}
+h5 {
+		color:white;
+}
+</style>
+<!--=============================================
+	=            banner three column         =
+	=============================================-->
+	
+	<div class="banner-three-column mb-50">
+		<div class="container">
+			
+			<div class="row">
+				{% for category in categories|slice:":16" %}
+				
+				<div class="col-lg-3 col-md-3 mb-sm-30">
+				
+					<!--=======  single banner  =======-->
+					
+					<div class="single-banner">
+						<a href="shop-left-sidebar.html">
+							<img src="{{ category.image.url }}" class="img-fluid" alt="">
+						</a>
+						<div class="text-content center">
+							<h5 style="color:darkslategray;">Design Creative</h5>
+							<h3 style="color:darkslategray; background-color: white; opacity:0.8">{{ category }}</h3>
+							<h4 style="color:white;">From  $60.99 - Sale 20%</h4>
+						</div>
+					</div>
+					
+					<!--=======  End of single banner  =======-->
+				</br>	
+				</div>
+				
+				{% endfor %}
+				
+				
+				
+			</div>
+			
+		</div>
+	</div>
+	
+    <!--=====  End of banner three column  ======-->

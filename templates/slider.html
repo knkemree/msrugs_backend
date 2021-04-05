@@ -1,0 +1,137 @@
+{% load static %}
+<style>
+	div.background {
+	  background: url(klematis.jpg) repeat;
+	  border: 2px solid black;
+	}
+	
+	div.transbox {
+	  margin: 30px;
+	  background-color: #ffffff;
+	  border: 1px solid black;
+	  opacity: 0.6;
+	}
+	
+	div.transbox p {
+	  margin: 5%;
+	  font-weight: bold;
+	  color: #000000;
+	}
+	</style>
+{% if sliders %}
+<!--=============================================
+	=            hero slider         =
+	=============================================-->
+	<!-- {% for slider in sliders %}
+	<div class="row">
+		<div class="col-md-4 col-ms-6">
+		   <div class="g-item">
+				 <img clas="img-responsive" src="{{ slider.image.url }}" alt="">
+				 <a data-rel="lightbox" class="overlay" href="">
+					 <span>+</span>
+				 </a>
+		   </div>
+		</div>
+	 </div>
+	{% endfor %} -->
+
+<div class="hero-area mb-30">
+<!--=======  slider container  =======-->
+
+	<div class="slider-container">
+<!--=======  hero slider one  =======-->
+
+		<div class="slider-style-2">
+<!--=======  slider item  =======-->
+
+
+			{% for slider in sliders %}
+			<!-- <div class="hero-slider-item" style="max-width: 100%; display: inline-block;"> -->
+			<div class="hero-slider-item" style="
+			 
+			 
+			 background: linear-gradient( rgba(0,0,0,0.2), rgba(0, 0, 0, 0.2) ),url('{{ MEDIA_URL }}{{ slider.image.url }}') no-repeat center center fixed;
+			 /* background-image: url('{{ MEDIA_URL }}{{ slider.image.url }}'); */
+			 background-position: center;
+			  background-size: cover;
+			  position: relative;
+			 display: inline-block;
+			 
+			 "
+			 >
+
+
+
+
+					<!--=======  slider content  =======-->
+
+					<div class="d-flex flex-column justify-content-center align-items-start h-100" >
+						<!-- <img style="width: 100%;
+					height: 100%;
+					object-fit: cover" src="{{ slider.image.url }}" alt="Responsive image"> -->
+
+
+						<!-- <a href="{{ slider.link }}"><img class="img-fluid"  src="{{ slider.image.url }}" alt=""></a> -->
+
+						<div class="container" >
+
+
+							<div class="row">
+								<div class="col-lg-2">
+
+								</div>
+
+								<div class="col-lg-8">
+									<div class="slider-content">
+
+
+
+										{% if slider.blinking_text %}
+										<div class="text-center blinking">
+										<h6>{{ slider.blinking_text }}</h6>
+										</div>
+										{% endif %}
+
+										{% if slider.header_text %}
+										<h1 class="text-center blinking" style=" color:white; 
+										background-color:transparent; 
+										text-shadow: white 0px 0px 10px;" >{{ slider.header_text|safe }}</h1>
+										{% endif %}
+
+										{% if slider.text %}
+										<p>{{ slider.text|safe }} </p>
+										{% endif %}
+
+										<!-- <p class="slider-price">starting at <span>$260.99</span></p> -->
+										<br>
+										{% if slider.button_text %}
+										<div class="text-center">
+										<button type="button" class="btn btn-info"><a href="{% if slider.link %}{{ slider.link }}{% endif %}">{{ slider.button_text }}</a></button>
+										</div>
+										{% endif %}
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+<!--=======  End of slider content  =======-->
+			</div>
+			{% endfor %}
+
+
+<!--=======  End of slider item  =======-->
+
+		</div>
+
+<!--=======  End of hero slider one  =======-->
+	</div>
+
+<!--=======  End of slider container  =======-->
+</div>
+
+	<!--=====  End of hero slider  ======-->
+	{% endif %}
+	<br>

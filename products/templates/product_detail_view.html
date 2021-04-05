@@ -1,0 +1,846 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  {{ product.name }}
+{% endblock %}
+{% block blank %}
+
+
+<script>
+    $(document).ready(function() {
+        // messages timeout for 10 sec 
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 2000); // <-- time in milliseconds, 1000 =  1 sec
+
+        // delete message
+        $('.del-msg').live('click',function(){
+            $('.del-msg').parent().attr('style', 'display:none;');
+        })
+    });
+</script>
+
+
+  
+
+<!--=============================================
+	=            breadcrumb area         =
+	=============================================-->
+	
+	<div class="breadcrumb-area pt-15 pb-15">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<!--=======  breadcrumb container  =======-->
+					
+					<div class="breadcrumb-container">
+						<nav>
+							<ul>
+                                <li class="parent-page"><a href="/">Home</a></li>
+                                {% if product.category.parent %}
+                                <li class="parent-page"><a href="{{ product.category.parent.get_absolute_url }}">{{ product.category.parent }}</a></li>
+                                {% endif %}
+								<li><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
+                            </ul>
+                            
+						</nav>
+					</div>
+					
+					<!--=======  End of breadcrumb container  =======-->
+				</div>
+			</div>
+		</div>
+	</div>
+	
+    <!--=====  End of breadcrumb area  ======-->
+
+    <!--=============================================
+    =            added to cart message         =
+    =============================================-->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                {% if messages %}
+				{% for message in messages %}
+				<div class="alert alert-{{message.tags}}" role="alert">
+					{{message}}... {{ variant.title }}
+				</div>
+				{% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!--=====  End of message  ======-->
+
+    <!--=============================================
+    =            single product content         =
+    =============================================-->
+    
+    <div class="single-product-content-area mb-50">
+        <div class="container"> 
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-xs-12 mb-xxs-25 mb-xs-25 mb-sm-25">
+                    <!-- single product tabstyle one image gallery -->
+                    <div class="product-image-slider fl-product-image-slider fl3-product-image-slider">
+                        <!--product large image start -->
+                        <div class="tab-content product-large-image-list fl-product-large-image-list fl3-product-large-image-list" id="myTabContent">
+                            <div class="tab-pane fade show active" id="single-slide-1" role="tabpanel" aria-labelledby="single-slide-tab-1">
+                                <!--Single Product Image Start-->
+                                <div class="single-product-img img-full">
+                                    
+                                    <img style="max-height: 400px; width: auto; object-fit: cover;" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" class="img-fluid" alt="">
+                                    <a href="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" class="big-image-popup"><i class="fa fa-search-plus"></i></a>
+                                </div>
+                                <!--Single Product Image End-->
+                            </div>
+                            
+
+                            {% for rs in gallery %}
+                            
+
+                            <div class="tab-pane fade" id="{{ rs.image.id}}" role="tabpanel" aria-labelledby="single-slide-tab-2">
+                                <!--Single Product Image Start-->
+                                <div class="single-product-img img-full">
+                                    <img style="max-height: 150px; width: auto; object-fit: cover;" src="{{ rs.image.url }}" class="img-fluid" alt="">
+                                    <a href="{{ rs.image.url }}"  class="big-image-popup"><i class="fa fa-search-plus"></i></a>
+                                </div>
+                                <!--Single Product Image End-->
+                            </div>
+                            
+                            {% endfor %}
+                            
+                        </div>
+                        <!--product large image End-->
+
+                        <!--product small image slider Start-->
+                        <div class="product-small-image-list fl-product-small-image-list fl3-product-small-image-list"> 
+                            <div class="nav small-image-slider fl3-small-image-slider" role="tablist">
+                                {% for rs in gallery %}
+                                <div style="width: 100px; 
+                                            height: 100px;
+                                            background-color: white;
+                                            /* background-image: url('{{ MEDIA_URL }}{{ rs.image.url }}') ; */
+                                            background-repeat: no-repeat;
+                                            background-size: contain;
+                                            background-position: center;
+                                            margin: 0 auto;" > 
+                                            <!-- istersen yukaridaki css'i silip class="image" yapabilirsin. yaparsan iki resimli halini kullanabilirsin ama resim boyutlari guzel olmayacak -->
+                                    
+                                        
+                                        <img style="height: 100px; width: auto;
+                                        margin-left: auto;
+                                        margin-right: auto;
+                                         object-fit: cover;" src="{{ rs.image.url }}" class="img-fluid" alt="">
+                                        
+                                    
+                                    
+                                    <!-- wishlist icon -->
+                                    <!-- <span class="wishlist-icon">
+                                            <a href="#" ><i class="icon ion-md-heart-empty"></i></a>
+                                    </span> -->
+                                </div>
+                                
+                                <!-- <div style="width: 100px; 
+                                            height: 100px;
+                                            background-color: white;
+                                            background-image: url('{{ MEDIA_URL }}{{ rs.image.url }}') ;
+                                            background-repeat: no-repeat;
+                                            background-size: contain;
+                                            background-position: center;
+                                            margin: 0 auto;">
+                                    <a data-toggle="tab" id="{{ rs.image.id }}" href="{{ rs.image.url }}"><img src="{{ rs.image.url }}"
+                                        class="img-fluid" alt=""></a>
+                                </div> -->
+
+                                <!-- <div class="single-small-image img-full">
+                                    <a data-toggle="tab" id="{{ rs.image.id }}" href="{{ rs.image.url }}"><img src="{{ rs.image.url }}"
+                                        class="img-fluid" alt=""></a>
+                                </div> -->
+                                {% endfor %}
+                            
+                            </div>
+                        </div>
+                        <!--product small image slider End-->
+                    </div>
+                    <!-- end of single product tabstyle one image gallery -->
+                </div>
+                <div class="col-lg-7 col-md-6 col-xs-12">
+                    <!-- product view description -->
+                    <div class="product-feature-details">
+                        {% if variant %}
+                        <h2 class="product-title mb-15">{{ variant.sku }}
+                            {% if variant.sale_price %}
+                            <span style="border-radius: 30px 30px 30px 30px; font-size:15px; display: inline-block;
+                                padding-left: 8px;
+                                padding-right: 8px;
+                                text-align: center; color: #fff!important;
+                                background-color: #4CAF50!important;">
+                                ON SALE
+                            </span> 
+                            {% endif %}
+                        </h2>
+                        {% else %}
+                        <h2 class="product-title mb-15">{{ product.name }}</h2>
+                        {% endif %}
+                        <!-- <div class="rating d-inline-block mb-15">
+                            <i class="fa fa-star active"></i>
+                            <i class="fa fa-star active"></i>
+                            <i class="fa fa-star active"></i>
+                            <i class="fa fa-star active"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+
+                        <p class="d-inline-block ml-10 review-link"><a href="#">(1 customer review)</a></p> -->
+
+                        <h2 class="product-price mb-0"> 
+                            
+                            <!-- <span class="main-price starting-at">$12.90</span> -->
+                            
+                            {% if variant %}
+                                {% if variant.sale_price %}
+                                    <span class="main-price discounted">${{ variant.price }}</span>
+                                    <span class="discounted-price">${{ variant.sale_price }}</span> <small><small style="background-color: #FFFF00"> {{ variant.title }}</small></small>
+                                {% else %}
+                            
+                                <span class="discounted-price">${{ variant.price }}</span> <small><small style="background-color: #FFFF00"> {{ variant.title }}</small></small>
+                                {% endif %}
+                            {% else %}
+                                {% if request.user.is_authenticated %}
+                                
+                                
+                                
+                                    <!-- <span class="main-price discounted">$60</span> -->
+                                    <span class="main-price starting-at"><small><small>starting at</small></small></span>
+                                    {% if product.get_lowest_sale_price.sale_price__min|floatformat:-2 < product.get_lowest_price.price__min|floatformat:-2  %}	
+                                        {% if not product.get_lowest_sale_price.sale_price__min|floatformat:-2 %}
+                                        <span class="discounted-price">  ${{ product.get_lowest_price.price__min|floatformat:-2  }}</span>
+                                        {% else %}
+                                        <span class="discounted-price">  ${{ product.get_lowest_sale_price.sale_price__min|floatformat:-2  }}</span>
+                                        {% endif %}
+                                    {% else %}
+                                    <span class="discounted-price">  ${{ product.get_lowest_price.price__min|floatformat:-2  }}</span>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </h2>
+                        <hr>
+                    
+                        
+                        
+                        
+                        
+                        <script>
+                            $(document).ready(function(){
+                                // Add minus icon for collapse element which is open by default
+                                $(".collapse.show").each(function(){
+                                    $(this).prev(".card-header").find(".fa").addClass("fa-minus").removeClass("fa-plus");
+                                });
+                                
+                                // Toggle plus minus icon on show hide of collapse element
+                                $(".collapse").on('show.bs.collapse', function(){
+                                    $(this).prev(".card-header").find(".fa").removeClass("fa-plus").addClass("fa-minus");
+                                }).on('hide.bs.collapse', function(){
+                                    $(this).prev(".card-header").find(".fa").removeClass("fa-minus").addClass("fa-plus");
+                                });
+                            });
+                        </script>
+
+                        <div class="accordion" id="accordionExample">
+                            <div class="card-header" id="headingZero">
+                                <h2 class="mb-0">
+                                    <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapseZero" style="color: #13A3CA;"><i class="fa fa-plus"></i> Description</button>									
+                                </h2>
+                            </div>
+                            <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionExample">
+                                <div class="product-description mb-20">
+                                    {% if product.description is not None %}<p>{{ product.description|safe }}</p>{% endif %}
+                                </div>
+                            </div>
+
+                            <div class="card-header" id="headingOne">
+                                <h2 class="mb-0">
+                                    <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" style="color: #13A3CA;"><i class="fa fa-plus"></i> Stock Availability</button>									
+                                </h2>
+                            </div>
+                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Size</th>
+                                            {% for i in product.variation_set.all %}
+                                            <th>{{ i.title }}</th>
+                                            {% endfor %} 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row"> Stock</th>
+                                            {% for var in product.variation_set.all %}
+                                                {% for ecom in veri2 %}                       
+                                                    {% if var.ecomdashid|floatformat == ecom.Id|floatformat %}
+                                                        <td>{{ ecom.QuantityOnHand }}</td>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                            
+                            
+
+                        
+                        
+                        
+                        
+                        {% if request.user.is_authenticated %}
+                        {% if request.user.is_authenticated %}{% if variant %}<p><a><strong>Availability: </strong>
+                            {% for ecom in veri2 %} 
+                            
+                                {% if ecom.Id|floatformat == variant.ecomdashid|floatformat %} 
+                                    {% if ecom.QuantityOnHand >= 1 %}
+                                        <strong style="color:rgb(64, 190, 32);">{{ecom.QuantityOnHand}}</strong>
+                                    {% else %}
+                                        <span style="color:red;"> Out of Stock </span>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% endif %}
+
+                        {% if product.color is not  null %}<p><a><strong>Color: </strong>{{ product.color }}</span></a></p>{% endif %}
+                            {% if product.variation_set.sizes %}
+                            
+                            <!-- <form id ="variation" action="{% url "products:choose_size" product.id  %}" method="post" > -->
+                            
+                                <!-- <span class="title"> Size:</span> <br> -->
+                                
+                                <p><a><strong>Size: </strong>{% if variant.title is not  null %} {{ variant.title }}{% endif %}</a></p>
+                                
+                                <!-- <p><a><strong>Choose size: </strong> -->
+                                    
+                                    <!-- <li><a href="{{ item.get_absolute_url }}">{{ item.title|capfirst }} >  ${{ item.price }}</a></li> -->
+                                    
+                                    <select name="size" id="id_size2" onchange='changeSelectedvalue()'>
+                                        <option value="" selected>Pick a Size</option>
+                                        {% for item in product.variation_set.sizes %}
+                                            <option value="{{ item.get_absolute_url }}" ><a>{{ item.title|capfirst }} > {% if item.sale_price %} ${{item.sale_price}}{% else %} ${{ item.price }}{% endif %}</a></option>
+                                        {% endfor %}
+                                    </select>
+
+                                      <script>
+                                          $(function(){
+                                            // bind change event to select
+                                            $('#id_size2').on('change', function () {
+                                                var url = $(this).val(); // get selected value
+                                                if (url) { // require a URL
+                                                    window.location = url; // redirect
+                                                }
+                                                return false;
+                                            });
+                                          });
+                                      </script>
+                                    
+                                
+
+                                <!-- <label for="id_size">Size:</label>
+                                <select name="size" id="id_size2"  onchange='changeSelectedvalue(); this.form.submit();'>
+                                    <option value="-----" >-----</option>
+                                    {% for item in product.variation_set.sizes %}
+                                    <option value="{{ item.title|lower }}" >{{ item.title|capfirst }} >  ${{ item.price }}</option>
+                                    {% endfor %}
+                                </select> -->
+                                <!-- <input id="variation_button" type="submit" value="get" style="display: none;"> -->
+                                <!-- <button id="variation_button" type="submit" style="display: none;">get</button> -->
+                                <!-- {% csrf_token %} -->
+                            
+                            <!-- </form> -->
+                            
+                            {% endif %}
+                        {% endif %}
+
+
+                        {% if product.variation_set.colors %}
+                        <div class="size mb-20">
+                            <span class="title"> Color:</span> <br>
+                            <select name="size" class="nice-select">
+                                {% for item in product.variation_set.colors %}
+                                <option value="{{ item.title|lower }}">{{ item.title|capfirst }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+
+                        {% if product.variation_set.packages %}
+                        <p><a><strong>Package: </strong>{% if variant.title is not  null %} {{ variant.title }}{% endif %}</a></p>
+                        <select name="size" id="id_size2" onchange='changeSelectedvalue()'>
+                            <option value="" selected>Pick a Package</option>
+                            {% for item in product.variation_set.packages %}
+                                <option value="{{ item.get_absolute_url }}" ><a>{{ item.title|capfirst }} > ${{ item.price }}</a></option>
+                            {% endfor %}
+                        </select>
+
+                          <script>
+                              $(function(){
+                                // bind change event to select
+                                $('#id_size2').on('change', function () {
+                                    var url = $(this).val(); // get selected value
+                                    if (url) { // require a URL
+                                        window.location = url; // redirect
+                                    }
+                                    return false;
+                                });
+                              });
+                          </script>
+                        {% endif %}
+                    
+
+
+                        {% if request.user.is_authenticated %}
+                            {% if quantity_on_hand >= 1 %}
+                            {% if variant %}
+                            
+                            <div class="cart-buttons mb-20">
+                                <br>
+        
+                                
+                            <form action="{% url "cart:cart_add" variant.id %}" method="post">
+                                <!-- <span class="quantity-title mr-10">Quantity: </span>
+                                <div class="pro-qty mb-20">
+                                    <input type="text" name="quantity" required="" id="id_quantity" value="1" min="1">
+                                    <a href="#" class="inc qty-btn">+</a>
+                                    <a href="#" class="dec qty-btn">-</a>
+                                    <input type="hidden" name="override" value="False" id="id_override">
+                                </div>
+                                <div class="add-to-cart-btn d-block">
+                                    <button id="addtocart_button" type="submit" class="add-to-cart-butonu" >Add to Cart</button>
+                                </div> -->
+
+                        
+                                <p>
+                                <label for="id_quantity">Quantity:</label>
+                                
+                                    <select name="quantity" id="id_quantity">
+                                        {% for i in loop_times %}
+                                            <option value={{ i }}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                
+                                    <input type="hidden" name="override" value="False" id="id_override">
+                                </p>
+                                <!-- {{ cart_product_form.as_p }}-->
+                                {% csrf_token %}
+                                <div class="add-to-cart-btn d-block">
+                                    <button id="addtocart_button" type="submit" class="add-to-cart-butonu" >Add to Cart</button>
+                                </div> 
+                                
+                            </form>
+                                <!-- <span class="quantity-title mr-10">Quantity: </span>
+                                <div class="pro-qty mb-20">
+                                    <input type="text" value="1">
+                                </div>
+                                <div class="add-to-cart-btn d-block">
+                                    <a href="#" class="fl-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+                                </div> -->
+                            </div>
+                            {% endif %}
+                            {% endif %}
+                        {% else%}
+                        <div class="add-to-cart-btn d-block">
+                            <p><a href="{% url 'account:registration_view' %}" class="fl-btn"><i class="fa"></i> Become a Dealer</a></p>
+                            <!-- <p>Already Dealer?</p> -->
+                            <p><a href="{% url 'login' %}">Login</a> If you are a Dealer !</p>
+                            
+                        </div>
+                        {% endif %}
+
+                        {% if user.is_superuser is True %}    
+                        <p class="wishlist-link mb-20 pb-15">
+                            <br>
+                            <!-- <a href="#"> <i class="icon ion-md-heart-empty"></i> Browse Wishlist</a> -->
+                            <a href="/admin/products/product/{{product.id}}/change/"> <i class="icon ion-md-options"></i> Edit</a>
+                        </p> 
+                        {% endif %}
+
+                        <div class="category-list-container mb-20 my-3">
+                            
+                            <span>Categories: </span>
+                            <ul>
+                                {% if product.category.parent %}
+                                <li class="parent-page"><a href="{{ product.category.parent.get_absolute_url }}">{{ product.category.parent }}</a>,</li>
+                                {% endif %}
+								<li><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
+                                
+                                
+                            </ul>
+                        
+                        </div>
+                
+                        <!-- <div class="social-share-buttons">
+                            <h3>share this product</h3>
+                            <ul>
+                                <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a class="google-plus" href="#"><i class="fa fa-google-plus"></i></a></li>
+                                <li><a class="pinterest" href="#"><i class="fa fa-pinterest"></i></a></li>
+                            </ul>
+                        </div> -->
+                    </div>
+                    <!-- end of product quick view description -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--=====  End of single product content  ======-->
+
+    <!--=======  product description review   =======-->
+    
+    <div class="product-description-review-area mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!--=======  product description review container  =======-->
+                    
+                    <div class="tab-slider-wrapper product-description-review-container">
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link active" id="description-tab" data-toggle="tab" href="#product-description" role="tab"
+                                    aria-selected="true">Description</a>
+                                <a class="nav-item nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab"
+                                    aria-selected="false">Review</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="product-description" role="tabpanel" aria-labelledby="description-tab">
+                                <!--=======  product description  =======-->
+                                
+                                <div class="product-description">
+                                    <p>{{ product.description|safe }}</p>
+                                </div>
+                                
+                                <!--=======  End of product description  =======-->
+                            </div>
+                            <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                                <!--=======  review content  =======-->
+                                
+                                <!-- <div class="product-ratting-wrap">
+                                    <div class="pro-avg-ratting">
+                                        <h4>4.5 <span>(Overall)</span></h4>
+                                        <span>Based on 9 Comments</span>
+                                    </div>
+                                    <div class="ratting-list">
+                                        <div class="sin-list float-left">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <span>(5)</span>
+                                        </div>
+                                        <div class="sin-list float-left">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <span>(3)</span>
+                                        </div>
+                                        <div class="sin-list float-left">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <span>(1)</span>
+                                        </div>
+                                        <div class="sin-list float-left">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <span>(0)</span>
+                                        </div>
+                                        <div class="sin-list float-left">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <span>(0)</span>
+                                        </div>
+                                    </div>
+                                    <div class="rattings-wrapper">
+
+                                        <div class="sin-rattings">
+                                            <div class="ratting-author">
+                                                <h3>Cristopher Lee</h3>
+                                                <div class="ratting-star">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <span>(5)</span>
+                                                </div>
+                                            </div>
+                                            <p>enim ipsam voluptatem quia voluptas sit
+                                                aspernatur aut odit aut fugit, sed quia res eos
+                                                qui ratione voluptatem sequi Neque porro
+                                                quisquam est, qui dolorem ipsum quia dolor sit
+                                            amet, consectetur, adipisci veli</p>
+                                        </div>
+
+                                        <div class="sin-rattings">
+                                            <div class="ratting-author">
+                                                <h3>Rashed Mahmud</h3>
+                                                <div class="ratting-star">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <span>(5)</span>
+                                                </div>
+                                            </div>
+                                            <p>enim ipsam voluptatem quia voluptas sit
+                                                aspernatur aut odit aut fugit, sed quia res eos
+                                                qui ratione voluptatem sequi Neque porro
+                                                quisquam est, qui dolorem ipsum quia dolor sit
+                                            amet, consectetur, adipisci veli</p>
+                                        </div>
+
+                                        <div class="sin-rattings">
+                                            <div class="ratting-author">
+                                                <h3>Hasan Mubarak</h3>
+                                                <div class="ratting-star">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <span>(5)</span>
+                                                </div>
+                                            </div>
+                                            <p>enim ipsam voluptatem quia voluptas sit
+                                                aspernatur aut odit aut fugit, sed quia res eos
+                                                qui ratione voluptatem sequi Neque porro
+                                                quisquam est, qui dolorem ipsum quia dolor sit
+                                            amet, consectetur, adipisci veli</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="ratting-form-wrapper fix">
+                                        <h3>Add your Comments</h3>
+                                        <form action="#">
+                                            <div class="ratting-form row">
+                                                <div class="col-12 mb-15">
+                                                    <h5>Rating:</h5>
+                                                    <div class="ratting-star fix">
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12 mb-15">
+                                                    <label for="name">Name:</label>
+                                                    <input id="name" placeholder="Name" type="text">
+                                                </div>
+                                                <div class="col-md-6 col-12 mb-15">
+                                                    <label for="email">Email:</label>
+                                                    <input id="email" placeholder="Email" type="text">
+                                                </div>
+                                                <div class="col-12 mb-15">
+                                                    <label for="your-review">Your Review:</label>
+                                                    <textarea name="review" id="your-review"
+                                                    placeholder="Write a review"></textarea>
+                                                </div>
+                                                <div class="col-12">
+                                                    <input value="add review" type="submit">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div> -->
+                                
+                                <!--=======  End of review content  =======-->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!--=======  End of product description review container  =======-->
+                </div>
+                
+
+                
+                
+            </div>
+        </div>
+    </div>
+    
+    <!--=======  End of product description review   =======-->
+    
+    <!--=============================================
+    =            related product slider         =
+    =============================================-->
+    
+    <div class="related-product-slider-area mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+					<!--=======  section title  =======-->
+					
+					<div class="section-title">
+						<h2>RELATED PRODUCTS</h2>
+					</div>
+					
+					<!--=======  End of section title  =======-->
+				</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <!--=======  tab product slider  =======-->
+								
+                    <div class="fl-slider tab-product-slider">
+                        <!--=======  single product  =======-->
+                        {% for other_product in other_products %}
+                        <div class="fl-product">
+                            <!-- <div class="image sale-product"> -->
+                                <!-- asagidaki dive class="image" ekle eger uzerine geldiginde ikinci foto gostersin istiyorsan -->	
+                            <div>
+                                <a href="{{ other_product.get_absolute_url }}">
+                                    
+                                    <img style="height: 200px; width: auto; 
+                                    margin-left: auto;
+                                    margin-right: auto;" src="{{ other_product.image.url }}" class="img-fluid" alt="">
+                                    <!-- <img style="height: 200px; width: auto; 
+                                    margin-left: auto;
+                                    margin-right: auto;" src="{{ other_product.productimage_set.all.1.image.url }}" class="img-fluid" alt=""> -->
+                                </a>
+                                <!-- wishlist icon -->
+                                <!-- <span class="wishlist-icon">
+                                        <a href="#" ><i class="icon ion-md-heart-empty"></i></a>
+                                </span> -->
+                            </div>
+                            <div class="content">
+                                
+                                <h2 class="product-title"> <a href="{{ other_product.get_absolute_url }}">{{ other_product }}</a></h2>
+                                <!-- <div class="rating">
+                                    <i class="fa fa-star active"></i>
+                                    <i class="fa fa-star active"></i>
+                                    <i class="fa fa-star active"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div> -->
+                                <p class="product-price">
+                                    
+                                    <!-- <span class="main-price discounted">$71</span>
+                                    <span class="discounted-price">$65</span> -->
+                                    <span class="main-price starting-from">starting at</span>
+                                    {% if product.get_lowest_sale_price.sale_price__min|floatformat:-2 < product.get_lowest_price.price__min|floatformat:-2  %}	
+                                        {% if not product.get_lowest_sale_price.sale_price__min|floatformat:-2 %}
+                                        <span class="discounted-price">  ${{ product.get_lowest_price.price__min|floatformat:-2  }}</span>
+                                        {% else %}
+                                        <span class="discounted-price">  ${{ product.get_lowest_sale_price.sale_price__min|floatformat:-2  }}</span>
+                                        {% endif %}
+                                    {% else %}
+                                    <span class="discounted-price">  ${{ product.get_lowest_price.price__min|floatformat:-2  }}</span>
+                                    {% endif %}
+                                </p>
+
+                                <!-- <div class="hover-icons">
+                                    <ul>
+                                        <li><a href="#"  data-tooltip="Add to Cart"><i class="icon ion-md-cart"></i></a></li>
+                                        <li><a href="#"  data-tooltip="Compare"><i class="icon ion-md-options"></i></a></li>
+                                        <li><a href="#"  data-toggle = "modal" data-target="#quick-view-modal-container" data-tooltip="Quick View"><i class="icon ion-md-open"></i></a></li>
+                                    </ul>
+                                </div> -->
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <!--=======  End of single product  =======-->
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                    <!--=======  End of tab product slider  =======-->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--=====  End of related product slider  ======-->
+
+    <script type="text/javascript">
+        // Adres formunu doldurup place order'i tikladiginda eger delivery method secilmediyse alert vermesi icin
+        // eger empty_label="----Select----" ise bu kod calisacak aksi takdirde bozulacak. empty_label'i degistirirken dikkatli ol
+        $('#addtocart_button').click(function(e){
+           if($("#id_size2 option:selected").text() == '-----'){
+              alert('Please choose size.');
+              e.preventDefault();
+           }
+        });
+        
+        window.onload = function()
+          {
+            
+              var cookieVal = readCookie('selectBoxValue');
+              console.log(cookieVal);
+              if(cookieVal!=null)
+              {
+                  document.getElementById('id_size2').selectedIndex = cookieVal;
+                  eraseCookie('selectBoxValue')
+              }
+              
+          }
+          
+          
+          
+          function changeSelectedvalue()
+          {
+              var mySelectedIndex = document.getElementById('id_size2').selectedIndex;
+              createCookie("selectBoxValue",mySelectedIndex,1000);
+              
+          }
+          
+          
+          
+          function createCookie(name,value,days) {
+              if (days) {
+                  var date = new Date();
+                  date.setTime(date.getTime()+(days*24*60*60*1000));
+                  var expires = "; expires="+date.toGMTString();
+              }
+              else var expires = "";
+              document.cookie = name+"="+value+expires+"; path=/";
+          }
+          
+          function readCookie(name) {
+              var nameEQ = name + "=";
+              var ca = document.cookie.split(';');
+              for(var i=0;i < ca.length;i++) {
+                  var c = ca[i];
+                  while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                  if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+              }
+              return null;
+          }
+          
+          function eraseCookie(name) {
+              createCookie(name,"",-1);
+          }
+            
+        
+        </script>
+{% endblock %}
+
